@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Valorant Special Birthday - For Aufa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <!-- FONT AWESOME UNTUK ICON -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* RESET & CUSTOM FONT */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            overflow: hidden; 
+            overscroll-behavior: none; 
+            background: #000; color: #ece8e1; 
+            font-family: 'Arial', sans-serif; user-select: none;
+            -webkit-font-smoothing: antialiased;
+            touch-action: pan-y; 
+        }
+
+        .valo-font { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 2.5px; font-weight: 700; }
+
+        .screen { 
+            display: none; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; 
+            z-index: 10; opacity: 0; transition: opacity 1.5s ease-in-out; background: #000;
+            overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch;
+        }
+        .screen.active { display: block; opacity: 1; z-index: 20; }
+        .full-bg { width: 100%; height: 100%; object-fit: cover; position: fixed; top:0; left:0; z-index: -1; }
+
+        /* FITUR WAJIB LANDSCAPE UNTUK HP */
+        #rotate-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #0f1923; z-index: 999999; flex-direction: column; justify-content: center; 
+            align-items: center; text-align: center; padding: 40px;
+        }
+        #rotate-overlay h2 { color: #ff4655; font-size: 24px; letter-spacing: 5px; margin-bottom: 15px;}
+        #rotate-overlay p { color: #ece8e1; font-family: Arial, sans-serif; font-size: 14px; line-height: 1.6;}
+        .rotate-icon { font-size: 50px; margin-bottom: 20px; animation: spinRotate 2s infinite ease-in-out; }
+        @keyframes spinRotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(-90deg); } }
+
+        @media screen and (orientation: portrait) {
+            body.require-landscape #rotate-overlay { display: flex; }
+        }
+
+        /* STEP 1 & 2: FIRST SCREEN & LOGIN */
+        #step-first { background: #ff4829; }
+        #step-first .full-bg { object-position: center; object-fit: cover; width: 100%; height: 100%; }
+
+        #step-login { background: #000; }
+        .login-bg-master { background: url('assets/Valorant Login.jpg') center/cover no-repeat; position: fixed; top:0; left:0; width:100%; height:100%; z-index: 1; filter: grayscale(10%) contrast(110%); }
+        .login-layout { position: relative; width: 100%; min-height: 100%; display: flex; z-index: 2; }
+        .login-left { flex: 1.2; position: relative; }
+        .login-right { 
+            flex: 0.8; background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(12px); 
+            display: flex; justify-content: center; align-items: center; padding: 60px;
+            position: relative; overflow: hidden; border-left: 1px solid rgba(255, 255, 255, 0.03);
+            min-height: 100vh;
+        }
+        
+        .particle-container { position: absolute; top:0; left:0; width:100%; height:100%; z-index: -1; }
+        .particle { position: absolute; background: rgba(255, 255, 255, 0.1); border-radius: 50%; animation: floatParticle 8s infinite ease-in-out; pointer-events: none; }
+        .p1 { width: 5px; height: 5px; top: 10%; left: 5%; animation-delay: 0s; }
+        .p2 { width: 3px; height: 3px; top: 40%; left: 15%; animation-delay: 2s; }
+        .p3 { width: 7px; height: 7px; top: 70%; left: 8%; animation-delay: 4s; }
+        .p4 { width: 4px; height: 4px; top: 85%; left: 25%; animation-delay: 6s; }
+        @keyframes floatParticle { 0%, 100% { transform: translateY(0) translateX(0); opacity: 0; } 50% { transform: translateY(-50px) translateX(20px); opacity: 0.15; } }
+
+        .login-box { width: 100%; max-width: 360px; text-align: left; margin-top: 80px; margin-bottom: 40px; } 
+        .bday-text-kalem { color: #ece8e1; font-size: 15px; margin-bottom: 5px; text-shadow: 0 0 10px rgba(255, 70, 85, 0.4); animation: slowPulse 3s infinite ease-in-out; font-weight: 700; letter-spacing: 2px; }
+        @keyframes slowPulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+
+        .login-box h2 { font-size: 48px; margin-bottom: 40px; color: #ece8e1; text-align: left; }
+        
+        .valo-input-group { margin-bottom: 25px; position: relative;}
+        .valo-input-group label { display: block; font-size: 11px; color: rgba(236,232,225,0.4); text-transform: uppercase; margin-bottom: 5px; font-weight: bold;}
+        .valo-input-group input { width: 100%; padding: 16px 20px; border: none; border-radius: 4px; font-size: 14px; background: rgba(236,232,225,0.02); color: #ece8e1; outline: none; transition: 0.2s; font-weight: bold; border-bottom: 2px solid rgba(255,70,85,0.15); }
+        .valo-input-group input:focus { background: rgba(236,232,225,0.05); border-bottom-color: #ff4655; }
+
+        .login-help { display: flex; justify-content: space-between; font-size: 12px; color: #888; margin-bottom: 30px;}
+        .login-help a { color: #888; text-decoration: none; font-weight: bold;}
+        .login-help a:hover { color: #ff4655;}
+        
+        .btn-valo-submit { background: #ff4655; color: white; padding: 18px; border: none; width: 100%; font-size: 20px; cursor: pointer; border-radius: 4px; transition: 0.2s; letter-spacing: 3px; font-weight: bold; margin-top: 10px;}
+        .btn-valo-submit:hover { background: #e03e4d; }
+        .error-text { color: #ff4655; font-size: 13px; display: none; margin-bottom: 15px; text-align: left; }
+
+        /* STEP 3 & 4: LOADING & HOME SCREEN */
+        .loading-bar-container { position: fixed; bottom: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.1); z-index: 10;}
+        #loading-bar-fill { width: 0%; height: 100%; background: #ff4655; box-shadow: 0 0 15px #ff4655; transition: width 3.5s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        .home-left-gradient { position: fixed; top:0; left:0; width: 50%; height: 100%; background: linear-gradient(to right, rgba(0,0,0,0.9), transparent); z-index: 1;}
+        .home-top-left { position: absolute; top: 30px; left: 50px; display: flex; gap: 15px; align-items: center; z-index: 10; }
+        .home-top-left .v-logo { color: #ff4655; font-size: 28px; }
+        .home-top-left .v-text { font-size: 10px; letter-spacing: 2px; color: #ece8e1; font-family: Arial, sans-serif; font-weight: bold;}
+        .home-top-left .v-text span { color: #888; font-weight: normal;}
+
+        .home-top-right { position: absolute; top: 30px; right: 50px; display: flex; gap: 30px; color: #ece8e1; font-family: Arial, sans-serif; font-weight: bold; font-size: 14px; z-index: 10; align-items: center;}
+        
+        .home-menu { position: absolute; left: 50px; top: 55%; transform: translateY(-50%); z-index: 10; }
+        .home-menu li { list-style: none; font-size: 28px; margin: 8px 0; cursor: pointer; color: #ece8e1; transition: 0.2s; display: flex; align-items: center; text-shadow: 1px 1px 5px rgba(0,0,0,0.8);}
+        .home-menu li:hover { padding-left: 8px; }
+        .home-menu li.active-menu { color: #ff4655; font-size: 65px; margin-bottom: 20px;}
+        .menu-dot { display: inline-block; width: 4px; height: 4px; background: #ece8e1; margin-right: 15px; opacity: 0.6; }
+        .home-menu li:hover .menu-dot, .home-menu li.active-menu .menu-dot { opacity: 1; background: #ff4655; }
+
+        .home-right-panel { position: absolute; right: 50px; top: 55%; transform: translateY(-50%); width: 320px; z-index: 10; font-family: Arial, sans-serif; }
+        .panel-box { background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.05); padding: 20px; }
+        .mission { font-size: 11px; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 12px 0; color: #ece8e1; font-weight: bold;}
+        .mission span { float: right; color: #00ffaa; }
+
+        /* CUSTOM ALERT & DIFFICULTY POPUP */
+        .custom-alert-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        .custom-alert-box {
+            background: rgba(15, 25, 35, 0.98); border: 2px solid #ff4655; 
+            padding: 40px; text-align: center; min-width: 400px; max-width: 90vw; 
+            box-shadow: 0 10px 40px rgba(255,70,85,0.2); position: relative; 
+            animation: popIn 0.3s ease-out forwards;
+        }
+        @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        
+        /* NEW DIFFICULTY BUTTONS */
+        .diff-btn { 
+            background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); color: #ece8e1; 
+            width: 100%; margin-bottom: 15px; font-size: 18px; padding: 18px 25px; 
+            cursor: pointer; transition: all 0.3s ease; text-align: left;
+        }
+        .diff-btn:hover { 
+            background: rgba(255, 70, 85, 0.1); border-color: #ff4655; 
+            box-shadow: inset 0 0 15px rgba(255,70,85,0.3); transform: scale(1.02); 
+        }
+
+        /* STEP 5: LOBBY UI */
+        #step-lobby { background: #0f1923; }
+        .lobby-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: radial-gradient(circle, rgba(10, 30, 50, 0.4) 0%, rgba(10, 20, 35, 0.8) 100%); z-index: 1;}
+        .lobby-ui { position: relative; width: 100%; min-height: 100vh; z-index: 5; display: flex; flex-direction: column; padding-bottom: 20px;}
+        .lobby-top-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .lobby-nav-left { display: flex; align-items: center; gap: 20px; font-size: 12px; font-weight: bold; color: #888; }
+        .lobby-nav-left .back-btn { color: #ece8e1; cursor: pointer; transition: color 0.2s; }
+        .lobby-nav-left .back-btn:hover { color: #ff4655; }
+        .lobby-nav-center { display: flex; align-items: center; gap: 30px; }
+        .lobby-nav-center .icon { color: #888; font-size: 16px; cursor: pointer; }
+        .lobby-nav-center .play-btn { color: #ece8e1; font-size: 24px; text-shadow: 0 0 10px rgba(255,255,255,0.5); border-bottom: 2px solid #ece8e1; padding-bottom: 5px; cursor: pointer; }
+        .lobby-nav-right { display: flex; align-items: center; gap: 20px; font-size: 12px; font-weight: bold; color: #ece8e1; }
+        .lobby-sub-bar { display: flex; justify-content: center; gap: 30px; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 12px; font-weight: bold; color: rgba(236,232,225,0.5); flex-wrap: wrap; }
+        .lobby-sub-bar div { cursor: pointer; position: relative; padding-bottom: 15px; }
+        .lobby-sub-bar .active { color: #ece8e1; }
+        .lobby-sub-bar .active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: #00ffaa; box-shadow: 0 0 8px #00ffaa; }
+        .lobby-main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; padding: 20px 0; min-height: 480px;}
+        .party-status { display: flex; gap: 10px; margin-bottom: 20px; align-items: center;}
+        .party-toggle-container { display: flex; align-items: center; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); padding: 8px 15px; font-size: 11px; color: #00ffaa; font-weight: bold; letter-spacing: 1px; cursor: pointer; transition: 0.3s;}
+        .toggle-btn { width: 34px; height: 18px; background: #00ffaa; border-radius: 9px; position: relative; margin-left: 15px; transition: 0.3s; box-shadow: 0 0 5px #00ffaa;}
+        .toggle-btn::after { content: ''; position: absolute; right: 2px; top: 2px; width: 14px; height: 14px; background: #fff; border-radius: 50%; transition: 0.3s;}
+        .party-toggle-container.closed { color: #ece8e1; }
+        .party-toggle-container.closed .toggle-btn { background: #555; box-shadow: none;}
+        .party-toggle-container.closed .toggle-btn::after { right: 18px; background: #ece8e1;}
+        .party-btn { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); padding: 8px 15px; font-size: 11px; color: #ece8e1; font-weight: bold; letter-spacing: 1px; cursor: pointer; }
+        .lobby-roster { display: flex; gap: 15px; justify-content: center; align-items: center; }
+        .empty-slot { width: 220px; height: 400px; border: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.2); display: flex; justify-content: center; align-items: center; color: rgba(255,255,255,0.1); font-size: 40px; font-weight: 100; transition: 0.3s; }
+        .empty-slot:hover { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.4); cursor: pointer; }
+        .valorant-card { width: 240px; height: 420px; position: relative; clip-path: polygon(0 0, 100% 0, 100% calc(100% - 25px), 50% 100%, 0 calc(100% - 25px)); background: #000; border: 2px solid rgba(255,255,255,0.3); display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 5;}
+        .card-level-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #0f1923; border: 1px solid #ece8e1; color: #ece8e1; font-size: 10px; padding: 3px 8px; font-weight: bold; z-index: 2;}
+        .card-image-wrapper { flex: 1; overflow: hidden; position: relative; border-bottom: 2px solid #ece8e1; background: #1a1a1a; }
+        .card-image-wrapper img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+        .card-image-wrapper::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0, 255, 170, 0.15), rgba(15, 25, 35, 0.6)); mix-blend-mode: hard-light; z-index: 1; pointer-events: none;}
+        .card-image-wrapper::after { content: 'VALORANT'; position: absolute; top: 10px; left: 0; width: 100%; text-align: center; font-family: 'Oswald', sans-serif; font-size: 32px; color: rgba(255,255,255,0.1); letter-spacing: 5px; pointer-events: none; z-index: 2;}
+        .card-status-bar { background: #000; color: #ece8e1; font-size: 11px; text-align: center; padding: 6px 0; font-weight: bold; letter-spacing: 1px; }
+        .card-name-bar { background: #ece8e1; color: #000; font-size: 16px; text-align: center; padding: 12px 0; font-weight: bold; font-family: 'Arial', sans-serif; }
+        .card-title-bar { background: rgba(15,25,35,0.9); color: rgba(236,232,225,0.6); font-size: 10px; text-align: center; padding: 25px 0 35px 0; }
+        .lobby-bottom { padding: 10px 30px; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        .lobby-instruction { font-size: 11px; color: rgba(236,232,225,0.5); font-family: Arial, sans-serif; text-align: center; }
+        .lobby-action-btns { display: flex; gap: 15px; width: 100%; justify-content: center; flex-wrap: wrap;}
+        .btn-secondary { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: rgba(236,232,225,0.5); padding: 15px 30px; width: 200px; font-size: 14px; cursor: pointer; transition: 0.2s; }
+        .btn-secondary:hover { background: rgba(255,255,255,0.1); color: #ece8e1; }
+        .btn-primary-start { background: #ff4655; border: 2px solid transparent; color: white; padding: 15px 30px; width: 250px; font-size: 20px; font-weight: bold; letter-spacing: 2px; cursor: pointer; transition: 0.3s; }
+        .btn-primary-start:hover { background: #e03e4d; }
+        .btn-primary-start.in-queue { background: transparent !important; border: 2px solid rgba(255, 255, 255, 0.4); color: #ece8e1 !important; cursor: default;}
+
+        #loading-bar-fill-2 { width: 0%; height: 100%; background: #ff4655; box-shadow: 0 0 15px #ff4655; transition: width 8s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        /* STEP 6 & 7: BLACK SCREEN & AGENT SELECT */
+        #step-black-blank { background: #000; } 
+        #step-black-select { background: #000; display: flex; justify-content: center; align-items: center; flex-direction: column;}
+        
+        @keyframes pulseAlert { 0%, 100% { opacity: 1; text-shadow: 0 0 15px rgba(255, 70, 85, 0.6); } 50% { opacity: 0.7; text-shadow: none; } }
+        .black-select-text { font-size: 35px; color: #ece8e1; letter-spacing: 10px; animation: pulseAlert 2s infinite; text-align: center;}
+        .black-select-sub { font-size: 14px; color: #888; letter-spacing: 5px; margin-top: 15px; font-family: 'Arial', sans-serif; text-align: center;}
+
+        #step-agent-select { background: #0f1923; overflow-x: hidden; position: relative; }
+        .agent-select-frame {
+            position: fixed; top: 15px; left: 15px; right: 15px; bottom: 15px; z-index: 10; pointer-events: none;
+        }
+        .agent-bg-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        .agent-bg-wrapper img { width: 100%; height: 100%; object-fit: cover; object-position: center; transition: 0.5s ease-in-out; }
+        .agent-gradient { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, #0f1923 0%, rgba(15,25,35,0) 50%), linear-gradient(to top, #0f1923 0%, rgba(15,25,35,0.2) 30%); z-index: 2; pointer-events: none;}
+        .agent-ui-container { position: relative; width: 100%; min-height: 100vh; z-index: 5; display: flex; flex-direction: column; justify-content: space-between; padding: 40px; }
+        
+        .agent-top-left { display: flex; flex-direction: column; gap: 30px; pointer-events: none;}
+        .map-info-box { background: rgba(0,0,0,0.7); padding: 15px 30px; border-left: 5px solid #ff4655; display: inline-block; width: max-content; }
+        .map-info-box h3 { font-size: 30px; color: #ece8e1; letter-spacing: 3px; margin-bottom: 5px;}
+        .map-info-box p { font-size: 10px; color: rgba(236,232,225,0.5); letter-spacing: 2px; }
+
+        .team-list { display: flex; flex-direction: column; gap: 15px; }
+        .team-player { display: flex; align-items: center; gap: 15px; }
+        .team-avatar { width: 50px; height: 50px; border: 1px solid rgba(255,255,255,0.3); background: #1a1a1a; padding: 2px; position: relative;}
+        .team-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .team-avatar::after { content:''; position: absolute; bottom: -5px; right: -5px; width: 15px; height: 15px; background: #ff4655; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);}
+        .team-name { font-size: 16px; color: #ece8e1; font-weight: bold; font-family: 'Arial', sans-serif; }
+
+        /* PERBAIKAN RESPONSIVITAS TEKS DI WEB */
+        .agent-right-panel { position: absolute; right: 50px; top: 80px; width: auto; min-width: 400px; max-width: 550px; text-align: left; z-index: 10; }
+        .role-title { font-size: 14px; color: rgba(236,232,225,0.6); letter-spacing: 6px; margin-bottom: -10px; }
+        /* Teks Agent menggunakan clamp agar menyesuaikan ukuran layar tanpa turun baris */
+        .agent-name-title { font-size: clamp(40px, 5vw, 80px); white-space: nowrap; color: #ece8e1; letter-spacing: 2px; margin-bottom: 20px; text-shadow: 4px 4px 15px rgba(0,0,0,0.8); }
+        .ability-icons { display: flex; gap: 15px; margin-bottom: 30px; pointer-events: none;}
+        .ability-icons div { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.5); display: flex; justify-content: center; align-items: center; color: white; font-size: 20px; background: rgba(0,0,0,0.5); transform: rotate(45deg); }
+        .ability-icons div span { transform: rotate(-45deg); }
+
+        .agent-description { font-family: 'Arial', sans-serif; font-size: 13px; color: rgba(236,232,225,0.7); line-height: 1.8; margin-bottom: 40px; background: rgba(0,0,0,0.4); padding: 15px; border-left: 2px solid #888;}
+        .btn-lock-in { background: rgba(0,0,0,0.5); border: 2px solid #ece8e1; color: #ece8e1; padding: 20px 0; width: 100%; font-size: 28px; font-weight: bold; letter-spacing: 5px; cursor: pointer; transition: 0.3s; text-align: center; }
+        .btn-lock-in:hover { background: #ece8e1; color: #0f1923; }
+        .btn-lock-in.locked { background: #ff4655; border-color: #ff4655; color: white; cursor: not-allowed;}
+
+        /* SLIDER 3D CAROUSEL */
+        .agent-carousel-wrap {
+            position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+            display: flex; align-items: center; gap: 30px; z-index: 10;
+            perspective: 1000px;
+        }
+        .car-btn {
+            background: rgba(0,0,0,0.6); border: 2px solid rgba(255,255,255,0.3); color: #ece8e1;
+            width: 45px; height: 45px; border-radius: 5px; cursor: pointer; transition: 0.3s;
+            display: flex; justify-content: center; align-items: center; font-size: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+        .car-btn:hover { background: #ff4655; border-color: #ff4655; box-shadow: 0 0 15px rgba(255,70,85,0.5); }
+        .agent-carousel { position: relative; width: 160px; height: 110px; display: flex; justify-content: center; align-items: center; transform-style: preserve-3d; }
+        .car-item {
+            position: absolute; width: 90px; height: 90px; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid rgba(255,255,255,0.2); background: #000; overflow: hidden;
+            cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+        .car-item img { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; filter: grayscale(100%); transition: 0.5s; }
+        .car-item.active {
+            transform: translateX(0) translateZ(40px) scale(1.1);
+            border: 2px solid #ff4655; z-index: 3; box-shadow: 0 0 25px rgba(255,70,85,0.6);
+        }
+        .car-item.active img { opacity: 1; filter: grayscale(0%); }
+        .car-item.prev { transform: translateX(-80px) translateZ(-60px) rotateY(35deg); z-index: 2; }
+        .car-item.next { transform: translateX(80px) translateZ(-60px) rotateY(-35deg); z-index: 2; }
+        .car-name-tag { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.9); color: #ece8e1; font-size: 9px; text-align: center; padding: 4px 0; font-weight: bold; pointer-events: none;}
+        .car-item.active .car-name-tag { background: #ff4655; }
+
+        /* STEP 8: MASTERPIECE AIM TRAINER */
+        #step-aim-trainer { background: radial-gradient(circle at center, #0f1923 0%, #000 100%); cursor: none; overflow: hidden; }
+        #aimCanvas { display: block; width: 100%; height: 100%; position: absolute; top:0; left:0; z-index: 5; }
+        .aim-overlay-ui { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
+        .aim-score-box { position: absolute; top: 40px; right: 50px; background: rgba(0,0,0,0.6); border: 2px solid #ff4655; padding: 15px 30px; font-size: 32px; color: #ece8e1; letter-spacing: 5px; text-align: right; box-shadow: 0 0 15px rgba(255,70,85,0.3); }
+        .aim-instruction { position: absolute; top: 40px; left: 50%; transform: translateX(-50%); text-align: center; width: 100%; padding: 0 20px;}
+        .aim-instruction h2 { color: #ff4655; font-size: 24px; letter-spacing: 8px; text-shadow: 0 0 20px rgba(255,70,85,0.8); }
+        .aim-instruction p { color: #00ffaa; font-family: 'Arial', sans-serif; font-size: 16px; margin-top: 5px; font-weight: bold; letter-spacing: 2px;}
+
+        #whiteFlash {
+            position: fixed; top:0; left:0; width:100%; height:100%; background: white; 
+            opacity: 0; pointer-events: none; z-index: 9999; transition: opacity 0.5s ease-out; display: none;
+        }
+
+        /* STEP 9: THE FINAL GIFT */
+        #step-gift { background: #05080c; display: flex; justify-content: center; align-items: center; overflow: hidden;}
+        .gift-wrapper { position: relative; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; }
+        
+        .gift-box { position: absolute; width: 220px; height: 220px; cursor: pointer; z-index: 10; transition: transform 0.2s; }
+        .gift-box:hover { transform: scale(1.05) rotate(2deg); }
+        
+        .gift-body {
+            position: absolute; bottom: 0; left: 15px; width: 190px; height: 160px; background: #ff4655;
+            border: 3px solid #ece8e1; box-shadow: 0 10px 30px rgba(255,70,85,0.5); border-radius: 5px;
+            transition: 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .gift-body::after { content: ''; position: absolute; left: 50%; top: 0; transform: translateX(-50%); width: 30px; height: 100%; background: #ece8e1; }
+        
+        .gift-lid {
+            position: absolute; top: 20px; left: 0; width: 220px; height: 50px; background: #ff4655;
+            border: 3px solid #ece8e1; border-radius: 5px; z-index: 2; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            transition: 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-origin: center;
+        }
+        .gift-lid::before { content: ''; position: absolute; left: 50%; top: 0; transform: translateX(-50%); width: 30px; height: 100%; background: #ece8e1; }
+        .gift-lid::after { content: '🎀'; position: absolute; left: 50%; top: -45px; transform: translateX(-50%); font-size: 50px; }
+
+        .gift-reveal-content {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.3);
+            display: flex; flex-direction: column; align-items: center; opacity: 0; z-index: 5;
+            transition: 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none;
+        }
+        .gift-reveal-content img {
+            width: 300px; height: 400px; object-fit: cover; border-radius: 10px; 
+            border: 2px solid #ece8e1; box-shadow: 0 10px 50px rgba(0,0,0,0.9);
+        }
+        .gift-reveal-text {
+            color: #ece8e1; font-size: 24px; margin-top: 35px; letter-spacing: 4px; text-align: center;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8); white-space: nowrap; font-weight: bold;
+        }
+
+        .gift-wrapper.opened .gift-lid { transform: translateY(-200px) scale(0.5); opacity: 0; pointer-events: none;}
+        .gift-wrapper.opened .gift-body { transform: translateY(200px) scale(0.5); opacity: 0; pointer-events: none;}
+        .gift-wrapper.opened .gift-reveal-content { transform: translate(-50%, -50%) scale(1); opacity: 1; z-index: 20;}
+        .gift-wrapper.opened .gift-box { cursor: default; pointer-events: none;}
+
+        .star-burst { position: absolute; font-size: 24px; opacity: 0; pointer-events: none; z-index: 15;}
+        @keyframes burstOut { 0% { transform: translate(0,0) scale(0.5); opacity: 1; } 100% { transform: translate(var(--tx), var(--ty)) scale(1.5) rotate(180deg); opacity: 0; } }
+
+        /* RESPONSIVE CSS UNTUK LAYAR PENDEK (HP LANDSCAPE) */
+        @media screen and (max-height: 500px) {
+            .empty-slot { display: none; } 
+            .login-box { margin-top: 20px; margin-bottom: 20px;}
+            .login-box h2 { font-size: 32px; margin-bottom: 20px; }
+            .login-right { padding: 20px 40px; }
+            .valo-input-group { margin-bottom: 15px; }
+            .valo-input-group input { padding: 10px 15px; }
+            
+            .home-menu li { font-size: 20px; margin: 4px 0; }
+            .home-menu li.active-menu { font-size: 40px; margin-bottom: 10px; }
+            .home-top-left { top: 15px; left: 20px; }
+            .home-top-right { top: 15px; right: 20px; }
+            .home-menu { left: 20px; top: 50%; }
+            .home-right-panel { right: 20px; width: 250px; }
+            .panel-box { padding: 10px; }
+            
+            .agent-ui-container { padding: 15px; }
+            .agent-right-panel { right: 20px; top: 15px; width: 260px; min-width: unset; }
+            .agent-name-title { font-size: 35px; margin-bottom: 5px; }
+            .agent-description { font-size: 10px; margin-bottom: 15px; padding: 10px; line-height: 1.4; }
+            .ability-icons { margin-bottom: 15px; }
+            .ability-icons div { width: 30px; height: 30px; font-size: 14px;}
+            .btn-lock-in { font-size: 16px; padding: 10px 0; }
+            
+            .agent-carousel-wrap { bottom: 15px; gap: 15px;}
+            .car-item { width: 60px; height: 60px;}
+            .car-item.active { transform: translateX(0) translateZ(30px) scale(1.1); }
+            .car-item.prev { transform: translateX(-55px) translateZ(-40px) rotateY(35deg); }
+            .car-item.next { transform: translateX(55px) translateZ(-40px) rotateY(-35deg); }
+            .car-btn { width: 35px; height: 35px; font-size: 14px;}
+            
+            .lobby-top-bar { padding: 10px 20px; }
+            .lobby-sub-bar { padding: 10px 0; gap: 15px; font-size: 10px; }
+            .lobby-bottom { padding: 10px; }
+            .valorant-card { transform: scale(0.8); }
+            
+            .aim-score-box { top: 10px; right: 20px; font-size: 20px; padding: 10px 20px; }
+            .aim-instruction { top: 10px; }
+            .aim-instruction h2 { font-size: 18px; }
+            .aim-instruction p { font-size: 12px; }
+
+            .agent-carousel { position: relative; width: 160px; height: 0px; display: flex; justify-content: center; align-items: center; transform-style: preserve-3d; }
+            
+            .gift-reveal-content img { width: 200px; height: 260px; }
+            .gift-reveal-text { font-size: 18px; margin-top: 20px; }
+        }
+    </style>
+</head>
+<body class="require-landscape">
+
+    <div id="rotate-overlay">
+        <div class="rotate-icon">🔄</div>
+        <h2 class="valo-font">SYSTEM: ROTATION REQUIRED</h2>
+        <p>Tolong putar HP kamu ke mode Landscape (Miring) biar tampilannya sempurna sayang!</p>
+        <p style="font-size: 11px; margin-top: 10px; opacity:0.6;">(Pastikan rotasi otomatis di HP sudah menyala)</p>
+    </div>
+
+    <!-- AUDIO FILES -->
+    <audio id="audioJamrud" src="assets/jamrud-ultah.mp3" preload="auto"></audio>
+    <audio id="audioLobby" src="assets/soundtrack-lobby.mp3" loop preload="auto"></audio>
+    <audio id="audioGunshot" src="assets/gunshot.mp3" preload="auto"></audio>
+    <audio id="audioMeme" src="assets/meme.mp3" preload="auto"></audio>
+    <audio id="audioVictory" src="assets/victory-sound.mp3" preload="auto"></audio>
+
+    <div id="customAlert" class="custom-alert-overlay">
+        <div class="custom-alert-box" style="background:#0f1923; padding:40px; border-top:4px solid #ff4655; min-width:350px;">
+            <div class="custom-alert-title valo-font" style="color:#ff4655; font-size:14px; margin-bottom:15px;">SYSTEM MESSAGE</div>
+            <div id="customAlertText" class="custom-alert-msg" style="font-size:16px; margin-bottom:30px;"></div>
+            <button class="btn-alert valo-font" style="background:#ff4655; color:white; padding:12px 30px; border:none; cursor:pointer;" onclick="closeCustomAlert()">CONFIRM</button>
+        </div>
+    </div>
+
+    <div id="difficultyAlert" class="custom-alert-overlay">
+        <div class="custom-alert-box">
+            <div class="custom-alert-title valo-font" style="font-size: 22px; color: #ece8e1;"><i class="fa-solid fa-crosshairs" style="color: #ff4655; margin-right:8px;"></i> SELECT WARMUP DIFFICULTY</div>
+            <div class="custom-alert-msg" style="font-size: 13px; margin-bottom: 25px; color: rgba(236,232,225,0.6);">Buktikan AIM kamu, kumpulkan Orb untuk membuka akses hadiah utama!</div>
+            
+            <button class="diff-btn valo-font" onclick="selectDifficulty(10)">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span><i class="fa-solid fa-medal" style="color:#cd7f32; margin-right:10px;"></i> IRON RANK - WARMUP</span>
+                    <span style="font-size:12px; opacity:0.7;">10 ORBS</span>
+                </div>
+            </button>
+            <button class="diff-btn valo-font" onclick="selectDifficulty(30)">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span><i class="fa-solid fa-gem" style="color:#00ffaa; margin-right:10px;"></i> DIAMOND RANK - COMPETITIVE</span>
+                    <span style="font-size:12px; opacity:0.7;">30 ORBS</span>
+                </div>
+            </button>
+            <button class="diff-btn valo-font" style="border-color: rgba(255,70,85,0.5);" onclick="selectDifficulty(50)">
+                <div style="display:flex; justify-content:space-between; align-items:center; color:#ff4655;">
+                    <span><i class="fa-solid fa-crown" style="margin-right:10px;"></i> RADIANT RANK - PRO SCENE</span>
+                    <span style="font-size:12px; opacity:0.7;">50 ORBS</span>
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <section id="step-first" class="screen"><img src="assets/firstscreen.png" class="full-bg"></section>
+
+    <section id="step-login" class="screen">
+        <div class="login-bg-master"></div>
+        <div class="login-layout">
+            <div class="login-left"></div>
+            <div class="login-right">
+                <div class="particle-container"><div class="particle p1"></div><div class="particle p2"></div><div class="particle p3"></div><div class="particle p4"></div></div>
+                <div class="login-box">
+                    <div class="bday-text-kalem valo-font">SPECIAL BIRTHDAY EDITION</div>
+                    <h2 class="valo-font">SIGN IN</h2>
+                    <div class="valo-input-group">
+                        <label>Username</label>
+                        <input type="text" id="username" placeholder="Riot ID">
+                    </div>
+                    <div class="valo-input-group">
+                        <label>Password</label>
+                        <input type="password" id="password" placeholder="Riot Account Password">
+                    </div>
+                    <div class="login-help">
+                        <label style="color:rgba(236,232,225,0.3);"><input type="checkbox" checked style="accent-color:#ff4655; margin-right:5px;"> Stay signed in</label>
+                        <a href="#" onclick="showCustomAlert('Ingat terus rasa sayang kamu ke dia!')">Forgot Password?</a>
+                    </div>
+                    <p id="error-msg" class="error-text valo-font">Access Denied. Check credentials.</p>
+                    <button id="btnLogin" class="btn-valo-submit valo-font">ENTER</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="step-loading" class="screen">
+        <video id="vidLoading" src="assets/loadingscreen.mp4" playsinline loop class="full-bg"></video>
+        <div class="loading-bar-container"><div id="loading-bar-fill"></div></div>
+    </section>
+
+    <section id="step-home" class="screen">
+        <video id="vidHome" src="assets/homescreen.mp4" loop playsinline class="full-bg"></video>
+        <div class="home-left-gradient"></div>
+        <div class="home-top-left valo-font"><div class="v-logo">V</div><div class="v-text">DIMENSION<br><span>EPISODE 5 // ACT III</span></div></div>
+        <div class="home-top-right"><span>⚙️</span><span>V 0</span><span>R 3,838</span></div>
+        <div class="home-menu">
+            <ul>
+                <li id="btnPlay" class="active-menu valo-font"><span class="menu-dot"></span>PLAY</li>
+                <li class="valo-font" onclick="showCustomAlert('Klik PLAY aja sayang!')"><span class="menu-dot"></span>CAREER</li>
+                <li class="valo-font" onclick="showCustomAlert('Klik PLAY aja sayang!')"><span class="menu-dot"></span>BATTLEPASS</li>
+                <li class="valo-font" onclick="showCustomAlert('Klik PLAY aja sayang!')"><span class="menu-dot"></span>COLLECTION</li>
+                <li class="valo-font" onclick="showCustomAlert('Klik PLAY aja sayang!')"><span class="menu-dot"></span>AGENTS</li>
+                <li class="valo-font" onclick="showCustomAlert('Klik PLAY aja sayang!')"><span class="menu-dot"></span>STORE</li>
+            </ul>
+        </div>
+        <div class="home-right-panel">
+            <div class="panel-box">
+                <div style="font-size:10px; color:#888; margin-bottom:5px; font-weight:bold;">PLAY TO UNLOCK AGENTS</div>
+                <div style="display:flex; gap:5px; margin-bottom:15px;">
+                    <div style="flex:1; height:30px; background:rgba(255,70,85,0.8);"></div>
+                    <div style="flex:1; height:30px; background:rgba(255,255,255,0.1);"></div>
+                    <div style="flex:1; height:30px; background:rgba(255,255,255,0.1);"></div>
+                </div>
+                <div style="font-size:10px; color:#888; margin-bottom:5px; font-weight:bold;">INTRODUCTION MISSIONS</div>
+                <div class="mission">Use Your Abilities <span>+1,000XP</span></div>
+                <div class="mission" style="border-bottom:none;">Purchase Shields <span>+1,000XP</span></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="step-lobby" class="screen">
+        <img src="assets/lobby.png" class="full-bg">
+        <div class="lobby-overlay"></div>
+        <div class="lobby-ui">
+            <div class="lobby-top-bar valo-font">
+                <div class="lobby-nav-left"><span class="back-btn" onclick="backToHome()">&lt; BACK // LOBBY</span></div>
+                <div class="lobby-nav-center"><span class="icon">⌂</span><span class="icon">❖</span><span class="icon">★</span><span class="play-btn">PLAY</span><span class="icon">⚔</span><span class="icon">🛡</span><span class="icon">🛒</span></div>
+                <div class="lobby-nav-right"><span>⚙️</span> <span>V 0</span> <span>R 3,838</span></div>
+            </div>
+            
+            <div class="lobby-sub-bar valo-font">
+                <div class="active">UNRATED</div>
+                <div onclick="showCustomAlert('Main Unrated aja dulu sayang!')">COMPETITIVE</div>
+                <div onclick="showCustomAlert('Main Unrated aja dulu sayang!')">SWIFTPLAY</div>
+                <div onclick="showCustomAlert('Main Unrated aja dulu sayang!')">SPIKE RUSH</div>
+                <div onclick="showCustomAlert('Main Unrated aja dulu sayang!')">DEATHMATCH</div>
+            </div>
+            
+            <div class="lobby-main">
+                <div class="party-status valo-font">
+                    <div class="party-toggle-container" id="partyToggleBtn" onclick="toggleParty()">
+                        <span id="partyToggleText">OPEN PARTY</span>
+                        <div class="toggle-btn"></div>
+                    </div>
+                    <button class="party-btn">PARTY CODE</button>
+                </div>
+                
+                <div class="lobby-roster">
+                    <div class="empty-slot">+</div>
+                    <div class="empty-slot">+</div>
+                    <div class="valorant-card">
+                        <div class="card-level-badge">14</div>
+                        <div class="card-image-wrapper"><img src="assets/customer.png" alt="Agent"></div>
+                        <div class="card-status-bar valo-font">READY</div>
+                        <div class="card-name-bar">BIRTHDAY BOY</div>
+                        <div class="card-title-bar valo-font">Old Dog</div>
+                    </div>
+                    <div class="empty-slot">+</div>
+                    <div class="empty-slot">+</div>
+                </div>
+            </div>
+            <div class="lobby-bottom">
+                <div class="lobby-instruction">Unrated: Standard VALORANT. Switch between attack and defense at the half. First to 13 wins.</div>
+                <div class="lobby-action-btns valo-font">
+                    <button class="btn-secondary">PRACTICE</button>
+                    <button id="btnStartGame" class="btn-primary-start">START</button>
+                    <button class="btn-secondary">LEAVE PARTY</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="step-loading-2" class="screen">
+        <video id="vidLoading2" src="assets/loadingscreen.mp4" playsinline loop class="full-bg"></video>
+        <div class="loading-bar-container"><div id="loading-bar-fill-2"></div></div>
+    </section>
+
+    <section id="step-black-blank" class="screen"></section>
+    <section id="step-black-select" class="screen">
+        <h1 class="black-select-text valo-font">SELECT YOUR AGENT</h1>
+        <p class="black-select-sub valo-font">MATCH FOUND // PREPARING DEPLOYMENT</p>
+    </section>
+
+    <section id="step-agent-select" class="screen">
+        <div class="agent-select-frame"></div>
+        <div class="agent-bg-wrapper"><img id="agent-main-bg" src="assets/customer1.jpeg" alt="Birthday Boy"></div>
+        <div class="agent-gradient"></div>
+        <div class="agent-ui-container">
+            <div class="agent-top-left">
+                <div class="map-info-box valo-font"><h3>ASCENT</h3><p>UNRATED // BEST DAY EVER</p></div>
+                <div class="team-list">
+                    <div class="team-player"><div class="team-avatar"><img src="assets/customer.png"></div><div class="team-name">Aufa </div></div>
+                </div>
+            </div>
+            <div class="agent-right-panel">
+                <div class="role-title valo-font">THE MAIN CHARACTER</div>
+                <div class="agent-name-title valo-font">BIRTHDAY BOY</div>
+                <div class="ability-icons"><div><span>★</span></div><div><span>❖</span></div><div><span>⚡</span></div><div><span>🛡</span></div></div>
+                <div class="agent-description">
+                    Happy birthday sayang! Semoga panjang umur, sehat selalu, dan semua yang kamu impikan tahun ini bisa segera terwujud. Tetap jadi versi terbaik dari dirimu, aku bakal selalu di sini buat dukung kamu terus.
+                </div>
+                <button id="btnLockIn" class="btn-lock-in valo-font">LOCK IN</button>
+            </div>
+            
+            <div class="agent-carousel-wrap valo-font">
+                <button class="car-btn" id="prevAgent"><i class="fa-solid fa-chevron-left"></i></button>
+                <div class="agent-carousel" id="agentCarousel">
+                    <!-- Injected by JS -->
+                </div>
+                <button class="car-btn" id="nextAgent"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <section id="step-aim-trainer" class="screen">
+        <canvas id="aimCanvas"></canvas>
+        <div class="aim-overlay-ui">
+            <div class="aim-instruction">
+                <h2 class="valo-font">WARMUP INITIATED</h2>
+                <p>MENANGKAN UNTUK MENDAPATKAN HADIAH</p>
+            </div>
+            <div id="scoreDisplay" class="aim-score-box valo-font">SCORE: 0 / 50</div>
+        </div>
+        <div id="whiteFlash"></div>
+    </section>
+
+    <section id="step-gift" class="screen">
+        <div class="gift-wrapper" id="giftWrapper">
+            <div class="gift-box" id="theGiftBox">
+                <div class="gift-lid"></div>
+                <div class="gift-body"></div>
+            </div>
+            <div class="gift-reveal-content">
+                <img src="assets/user.jpeg" alt="The Best Gift">
+                <div class="gift-reveal-text valo-font">SURPRISE! HADIAHNYA AKU</div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        window.onload = () => {
+            showScreen('step-first');
+            setTimeout(() => { showScreen('step-login'); }, 3500);
+            initCarousel(); 
+        };
+
+        // AUDIO UNLOCK HACK BUAT HP
+        document.body.addEventListener('click', function unlockAudio() {
+            let audios = ['audioJamrud', 'audioLobby', 'audioGunshot', 'audioMeme', 'audioVictory'];
+            audios.forEach(id => {
+                let a = document.getElementById(id);
+                if(a) { a.play().then(() => a.pause()).catch(e=>{}); }
+            });
+            document.body.removeEventListener('click', unlockAudio);
+        }, {once: true});
+
+        // FUNGSI REQUEST FULLSCREEN BROWSER
+        function requestFullScreen() {
+            let elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen().catch(err => console.log(err));
+            } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.webkitRequestFullscreen().catch(err => console.log(err));
+            } else if (elem.msRequestFullscreen) { /* IE11 */
+                elem.msRequestFullscreen().catch(err => console.log(err));
+            }
+        }
+
+        function showCustomAlert(msg) {
+            document.getElementById('customAlertText').innerText = msg;
+            document.getElementById('customAlert').style.display = 'flex';
+        }
+        function closeCustomAlert() {
+            document.getElementById('customAlert').style.display = 'none';
+        }
+
+        const showScreen = (id) => {
+            document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+            const target = document.getElementById(id);
+            target.classList.add('active');
+            target.scrollTo(0,0);
+        };
+
+        function toggleParty() {
+            const btn = document.getElementById('partyToggleBtn');
+            btn.classList.toggle('closed');
+            const text = document.getElementById('partyToggleText');
+            if(btn.classList.contains('closed')) {
+                text.innerText = 'CLOSED PARTY 🔒';
+                text.style.color = '#ece8e1';
+            } else {
+                text.innerText = 'OPEN PARTY 🔓';
+                text.style.color = '#00ffaa';
+            }
+        }
+
+        // LOGIN USER & TRIGGER FULLSCREEN
+        document.getElementById('btnLogin').onclick = () => {
+            // Panggil API fullscreen sesaat setelah interaksi klik login
+            requestFullScreen();
+
+            const u = document.getElementById('username').value;
+            const p = document.getElementById('password').value;
+            
+            if(u.toLowerCase() === 'rageya' && p === 'rageya1234') {
+                document.getElementById('error-msg').style.display = 'none';
+                showScreen('step-loading');
+                const vidLoad = document.getElementById('vidLoading');
+                vidLoad.muted = false;
+                vidLoad.play();
+                setTimeout(() => document.getElementById('loading-bar-fill').style.width = '100%', 100);
+                setTimeout(() => {
+                    vidLoad.pause(); 
+                    showScreen('step-home');
+                    document.getElementById('vidHome').play();
+                }, 3500);
+            } else {
+                document.getElementById('error-msg').style.display = 'block';
+            }
+        };
+
+        document.getElementById('btnPlay').onclick = () => {
+            document.getElementById('vidHome').pause(); 
+            showScreen('step-lobby');
+            document.getElementById('audioLobby').play();
+        };
+
+        function backToHome() {
+            showScreen('step-home');
+            document.getElementById('vidHome').play();
+            document.getElementById('audioLobby').pause();
+        }
+
+        const btnStart = document.getElementById('btnStartGame');
+        btnStart.onclick = function() {
+            this.innerText = 'IN QUEUE';
+            this.classList.add('in-queue'); 
+            document.getElementById('audioLobby').pause(); 
+
+            setTimeout(() => {
+                showScreen('step-loading-2');
+                document.getElementById('vidLoading2').play();
+                document.getElementById('audioJamrud').play(); 
+                setTimeout(() => document.getElementById('loading-bar-fill-2').style.width = '100%', 100);
+            }, 2000);
+
+            setTimeout(() => { showScreen('step-black-blank'); }, 10000); 
+            setTimeout(() => { showScreen('step-black-select'); }, 12000); 
+            setTimeout(() => { showScreen('step-agent-select'); }, 16000); 
+        };
+
+        // LOGIC 3D CAROUSEL AGENT SELECT
+        const carouselData = [
+            { src: 'assets/customer1.jpeg', name: 'LOCKED' },
+            { src: 'assets/customer2.jpeg', name: 'LOCKED' },
+            { src: 'assets/customer3.jpeg', name: 'LOCKED' },
+            { src: 'assets/customer4.jpeg', name: 'LOCKED' },
+            { src: 'assets/customer5.jpeg', name: 'LOCKED' },
+            { src: 'assets/customer6.jpeg', name: 'LOCKED' },
+            { src: 'assets/customer7.jpeg', name: 'LOCKED' },
+        ];
+        let currentCarouselIdx = 0;
+        const mainBg = document.getElementById('agent-main-bg');
+
+        function initCarousel() {
+            const container = document.getElementById('agentCarousel');
+            container.innerHTML = '';
+            carouselData.forEach((item, idx) => {
+                const el = document.createElement('div');
+                el.className = 'car-item';
+                el.innerHTML = `<img src="${item.src}"><div class="car-name-tag">${item.name}</div>`;
+                el.onclick = () => {
+                    if(currentCarouselIdx !== idx) {
+                        currentCarouselIdx = idx;
+                        updateCarousel();
+                    }
+                };
+                container.appendChild(el);
+            });
+            updateCarousel();
+        }
+
+        function updateCarousel() {
+            const items = document.querySelectorAll('.car-item');
+            const total = items.length;
+            
+            items.forEach((item, idx) => {
+                item.className = 'car-item'; 
+                let diff = (idx - currentCarouselIdx + total) % total;
+                
+                if (diff === 0) {
+                    item.classList.add('active');
+                    mainBg.src = carouselData[idx].src; 
+                } else if (diff === 1) {
+                    item.classList.add('next');
+                } else if (diff === total - 1) {
+                    item.classList.add('prev');
+                }
+            });
+        }
+
+        document.getElementById('prevAgent').onclick = () => {
+            currentCarouselIdx = (currentCarouselIdx - 1 + carouselData.length) % carouselData.length;
+            updateCarousel();
+        };
+        
+        document.getElementById('nextAgent').onclick = () => {
+            currentCarouselIdx = (currentCarouselIdx + 1) % carouselData.length;
+            updateCarousel();
+        };
+
+        // POPUP DIFFICULTY & WARMUP
+        let MAX_SCORE = 30; 
+        
+        document.getElementById('btnLockIn').onclick = function() {
+            if(this.classList.contains('locked')) return; 
+            document.getElementById('difficultyAlert').style.display = 'flex';
+        };
+
+        function selectDifficulty(score) {
+            MAX_SCORE = score;
+            document.getElementById('difficultyAlert').style.display = 'none';
+            
+            let lockBtn = document.getElementById('btnLockIn');
+            lockBtn.innerText = 'LOCKED';
+            lockBtn.classList.add('locked');
+            
+            setTimeout(() => { 
+                document.getElementById('audioJamrud').pause();
+                showScreen('step-aim-trainer');
+                initAimTrainer(); 
+            }, 1000);
+        }
+
+        // AIM TRAINER LOGIC
+        let aimActive = false;
+        function initAimTrainer() {
+            const canvas = document.getElementById('aimCanvas');
+            const ctx = canvas.getContext('2d');
+            let cw = canvas.width = window.innerWidth;
+            let ch = canvas.height = window.innerHeight;
+            
+            let targets = [];
+            let particles = [];
+            let mouse = { x: cw/2, y: ch/2 };
+            let shake = 0;
+            let recoil = 0;
+            let hitMarkerTime = 0;
+            let tick = 0;
+            let currentScore = 0;
+            
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            scoreDisplay.innerText = `SCORE: 0 / ${MAX_SCORE}`;
+            
+            const gunshotAudio = document.getElementById('audioGunshot');
+            const memeAudio = document.getElementById('audioMeme');
+            
+            aimActive = true;
+
+            window.addEventListener('resize', () => {
+                cw = canvas.width = window.innerWidth;
+                ch = canvas.height = window.innerHeight;
+            });
+
+            function updateAimPos(x, y) {
+                if(!aimActive) return;
+                mouse.x = x; mouse.y = y;
+            }
+            
+            canvas.addEventListener('mousemove', (e) => updateAimPos(e.clientX, e.clientY));
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault(); 
+                updateAimPos(e.touches[0].clientX, e.touches[0].clientY);
+            }, {passive: false});
+
+            function fireShot(x, y) {
+                if(!aimActive) return;
+                updateAimPos(x, y); 
+                
+                shake = 5; 
+                recoil = 15; 
+
+                let isHit = false;
+                let hitIndex = -1;
+
+                for(let i = targets.length - 1; i >= 0; i--) {
+                    let t = targets[i];
+                    const dist = Math.hypot(mouse.x - t.x, mouse.y - t.y);
+                    let hitRadius = (window.innerWidth < 600) ? t.r * 1.5 : t.r; 
+                    
+                    if(dist <= hitRadius) {
+                        isHit = true;
+                        hitIndex = i;
+                        break;
+                    }
+                }
+
+                if (isHit) {
+                    const soundClone = gunshotAudio.cloneNode();
+                    soundClone.volume = 0.5;
+                    soundClone.play().catch(e=>console.log(e));
+
+                    hitMarkerTime = 15; 
+                    currentScore++;
+                    scoreDisplay.innerText = `SCORE: ${currentScore} / ${MAX_SCORE}`;
+                    
+                    let targetHit = targets[hitIndex];
+                    createParticles(targetHit.x, targetHit.y, '#00ffff', 20);
+                    targets.splice(hitIndex, 1);
+                    
+                    if(currentScore >= MAX_SCORE) {
+                        aimActive = false; 
+                        triggerWinSequence();
+                    } else {
+                        setTimeout(spawnTarget, 100); 
+                    }
+                } else {
+                    const memeClone = memeAudio.cloneNode();
+                    memeClone.volume = 0.5;
+                    memeClone.play().catch(e=>console.log(e));
+                }
+            }
+
+            canvas.addEventListener('mousedown', (e) => fireShot(e.clientX, e.clientY));
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                fireShot(e.touches[0].clientX, e.touches[0].clientY);
+            }, {passive: false});
+
+            function spawnTarget() {
+                if(!aimActive) return;
+                targets.push({
+                    x: 100 + Math.random() * (cw - 200),
+                    y: 100 + Math.random() * (ch/2), 
+                    r: 20 + Math.random() * 15, 
+                    scale: 0,
+                    spawnTime: Date.now(),
+                    lifespan: 1500
+                });
+            }
+
+            function createParticles(x, y, color, amount) {
+                for(let i=0; i<amount; i++) {
+                    particles.push({
+                        x: x, y: y,
+                        vx: (Math.random() - 0.5) * 15,
+                        vy: (Math.random() - 0.5) * 15,
+                        life: 1.0, color: color
+                    });
+                }
+            }
+
+            spawnTarget();
+            setTimeout(spawnTarget, 500);
+
+            function loop() {
+                if(!aimActive && particles.length === 0) return; 
+                requestAnimationFrame(loop);
+                
+                ctx.fillStyle = '#0a0f16';
+                ctx.fillRect(0,0,cw,ch);
+
+                ctx.save();
+                if(shake > 0) {
+                    ctx.translate((Math.random()-0.5)*shake, (Math.random()-0.5)*shake);
+                    shake *= 0.8;
+                    if(shake < 0.5) shake = 0;
+                }
+
+                tick++;
+                ctx.strokeStyle = 'rgba(0, 255, 255, 0.05)';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                const horizonY = ch * 0.55;
+                for(let i=-cw*2; i<cw*3; i+=100) {
+                    ctx.moveTo(i, ch);
+                    ctx.lineTo(cw/2 + (i-cw/2)*0.2, horizonY);
+                }
+                let offset = (tick * 3) % 50; 
+                for(let j=horizonY; j<=ch; j+=Math.pow((j-horizonY)/10, 1.3) + 1) {
+                    let drawY = j + offset;
+                    if(drawY > ch) continue;
+                    ctx.moveTo(0, drawY);
+                    ctx.lineTo(cw, drawY);
+                }
+                ctx.stroke();
+
+                let now = Date.now();
+                for(let i=targets.length-1; i>=0; i--) {
+                    let t = targets[i];
+                    if(now - t.spawnTime > t.lifespan) {
+                        targets.splice(i, 1);
+                        spawnTarget(); 
+                        continue;
+                    }
+
+                    if(t.scale < 1) t.scale += 0.1; 
+                    
+                    ctx.save();
+                    ctx.translate(t.x, t.y);
+                    ctx.scale(t.scale, t.scale);
+                    
+                    let lifeRatio = (now - t.spawnTime) / t.lifespan;
+                    let coreColor = lifeRatio > 0.7 ? '#ff4655' : '#00ffff';
+
+                    let grad = ctx.createRadialGradient(0,0,0, 0,0,t.r);
+                    grad.addColorStop(0, '#ffffff');
+                    grad.addColorStop(0.3, coreColor);
+                    grad.addColorStop(1, 'rgba(0,255,255,0)');
+                    
+                    ctx.fillStyle = grad;
+                    ctx.beginPath();
+                    ctx.arc(0, 0, t.r*1.2, 0, Math.PI*2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+
+                for(let i=particles.length-1; i>=0; i--) {
+                    let p = particles[i];
+                    p.x += p.vx; p.y += p.vy;
+                    p.life -= 0.03;
+                    if(p.life <= 0) { particles.splice(i, 1); continue; }
+                    ctx.fillStyle = p.color;
+                    ctx.globalAlpha = p.life;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 4 * p.life, 0, Math.PI*2);
+                    ctx.fill();
+                    ctx.globalAlpha = 1.0;
+                }
+
+                if(aimActive) {
+                    if(recoil > 0) recoil *= 0.8;
+                    const cGap = 8 + recoil; 
+                    const cLen = 12;
+                    
+                    ctx.strokeStyle = '#00ffff';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(mouse.x, mouse.y - cGap); ctx.lineTo(mouse.x, mouse.y - cGap - cLen);
+                    ctx.moveTo(mouse.x, mouse.y + cGap); ctx.lineTo(mouse.x, mouse.y + cGap + cLen);
+                    ctx.moveTo(mouse.x - cGap, mouse.y); ctx.lineTo(mouse.x - cGap - cLen, mouse.y);
+                    ctx.moveTo(mouse.x + cGap, mouse.y); ctx.lineTo(mouse.x + cGap + cLen, mouse.y);
+                    ctx.stroke();
+
+                    ctx.fillStyle = '#00ffff';
+                    ctx.fillRect(mouse.x - 1, mouse.y - 1, 2, 2);
+
+                    if(hitMarkerTime > 0) {
+                        hitMarkerTime--;
+                        ctx.strokeStyle = '#ff4655';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        let hs = 15; 
+                        ctx.moveTo(mouse.x - hs, mouse.y - hs); ctx.lineTo(mouse.x - hs/2, mouse.y - hs/2);
+                        ctx.moveTo(mouse.x + hs, mouse.y + hs); ctx.lineTo(mouse.x + hs/2, mouse.y + hs/2);
+                        ctx.moveTo(mouse.x - hs, mouse.y + hs); ctx.lineTo(mouse.x - hs/2, mouse.y + hs/2);
+                        ctx.moveTo(mouse.x + hs, mouse.y - hs); ctx.lineTo(mouse.x + hs/2, mouse.y - hs/2);
+                        ctx.stroke();
+                    }
+                }
+                ctx.restore(); 
+            }
+            loop(); 
+        }
+
+        // WIN SEQUENCE
+        function triggerWinSequence() {
+            const flash = document.getElementById('whiteFlash');
+            flash.style.display = 'block';
+            setTimeout(() => { flash.style.opacity = '1'; }, 50);
+            setTimeout(() => {
+                showScreen('step-gift'); 
+                flash.style.opacity = '0';
+                setTimeout(() => { flash.style.display = 'none'; }, 1000);
+            }, 1000);
+        }
+
+        // BUKA KADO
+        document.getElementById('theGiftBox').onclick = function() {
+            const wrapper = document.getElementById('giftWrapper');
+            
+            if(wrapper.classList.contains('opened')) return; 
+            wrapper.classList.add('opened'); 
+            
+            document.getElementById('audioVictory').play();
+
+            for(let i=0; i<25; i++) {
+                let star = document.createElement('div');
+                star.className = 'star-burst';
+                star.innerText = ['✨', '🌟', '💖', '🎉'][Math.floor(Math.random()*4)];
+                
+                let angle = Math.random() * Math.PI * 2;
+                let distance = 150 + Math.random() * 200;
+                star.style.setProperty('--tx', Math.cos(angle) * distance + 'px');
+                star.style.setProperty('--ty', Math.sin(angle) * distance + 'px');
+                star.style.animation = 'burstOut 1.5s ease-out forwards';
+                
+                document.getElementById('step-gift').appendChild(star);
+                setTimeout(() => star.remove(), 1500);
+            }
+        };
+    </script>
+</body>
+</html>
