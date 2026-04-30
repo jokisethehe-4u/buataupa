@@ -2,10 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Valorant Special Birthday - For Aufa</title>
+    <!-- META TAG KHUSUS IOS & PWA BIAR FULLSCREEN -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <title>Valorant Special Birthday - Masterpiece Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&display=swap" rel="stylesheet">
-    <!-- FONT AWESOME UNTUK ICON -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -33,7 +37,7 @@
 
         /* FITUR WAJIB LANDSCAPE UNTUK HP */
         #rotate-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: #0f1923; z-index: 999999; flex-direction: column; justify-content: center; 
             align-items: center; text-align: center; padding: 40px;
         }
@@ -41,10 +45,6 @@
         #rotate-overlay p { color: #ece8e1; font-family: Arial, sans-serif; font-size: 14px; line-height: 1.6;}
         .rotate-icon { font-size: 50px; margin-bottom: 20px; animation: spinRotate 2s infinite ease-in-out; }
         @keyframes spinRotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(-90deg); } }
-
-        @media screen and (orientation: portrait) {
-            body.require-landscape #rotate-overlay { display: flex; }
-        }
 
         /* STEP 1 & 2: FIRST SCREEN & LOGIN */
         #step-first { background: #ff4829; }
@@ -126,7 +126,6 @@
         }
         @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         
-        /* NEW DIFFICULTY BUTTONS */
         .diff-btn { 
             background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); color: #ece8e1; 
             width: 100%; margin-bottom: 15px; font-size: 18px; padding: 18px 25px; 
@@ -194,9 +193,7 @@
         .black-select-sub { font-size: 14px; color: #888; letter-spacing: 5px; margin-top: 15px; font-family: 'Arial', sans-serif; text-align: center;}
 
         #step-agent-select { background: #0f1923; overflow-x: hidden; position: relative; }
-        .agent-select-frame {
-            position: fixed; top: 15px; left: 15px; right: 15px; bottom: 15px; z-index: 10; pointer-events: none;
-        }
+        .agent-select-frame { position: fixed; top: 15px; left: 15px; right: 15px; bottom: 15px; z-index: 10; pointer-events: none; }
         .agent-bg-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         .agent-bg-wrapper img { width: 100%; height: 100%; object-fit: cover; object-position: center; transition: 0.5s ease-in-out; }
         .agent-gradient { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, #0f1923 0%, rgba(15,25,35,0) 50%), linear-gradient(to top, #0f1923 0%, rgba(15,25,35,0.2) 30%); z-index: 2; pointer-events: none;}
@@ -214,10 +211,8 @@
         .team-avatar::after { content:''; position: absolute; bottom: -5px; right: -5px; width: 15px; height: 15px; background: #ff4655; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);}
         .team-name { font-size: 16px; color: #ece8e1; font-weight: bold; font-family: 'Arial', sans-serif; }
 
-        /* PERBAIKAN RESPONSIVITAS TEKS DI WEB */
         .agent-right-panel { position: absolute; right: 50px; top: 80px; width: auto; min-width: 400px; max-width: 550px; text-align: left; z-index: 10; }
         .role-title { font-size: 14px; color: rgba(236,232,225,0.6); letter-spacing: 6px; margin-bottom: -10px; }
-        /* Teks Agent menggunakan clamp agar menyesuaikan ukuran layar tanpa turun baris */
         .agent-name-title { font-size: clamp(40px, 5vw, 80px); white-space: nowrap; color: #ece8e1; letter-spacing: 2px; margin-bottom: 20px; text-shadow: 4px 4px 15px rgba(0,0,0,0.8); }
         .ability-icons { display: flex; gap: 15px; margin-bottom: 30px; pointer-events: none;}
         .ability-icons div { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.5); display: flex; justify-content: center; align-items: center; color: white; font-size: 20px; background: rgba(0,0,0,0.5); transform: rotate(45deg); }
@@ -365,7 +360,7 @@
         }
     </style>
 </head>
-<body class="require-landscape">
+<body>
 
     <div id="rotate-overlay">
         <div class="rotate-icon">🔄</div>
@@ -600,58 +595,48 @@
     </section>
 
     <script>
-      // BIKIN VARIABEL BUAT CEK APAKAH APP UDAH JALAN
+        // BIKIN VARIABEL BUAT CEK APAKAH APP UDAH JALAN
         let isAppStarted = false;
 
-        // FUNGSI BUAT MULAI SEQUENCE APLIKASI
+        // FUNGSI BUAT MULAI SEQUENCE APLIKASI JIKA LANDSCAPE
         function startAppSequence() {
-            if (isAppStarted) return; // Biar nggak jalan double kalau layarnya diputar-putar terus
+            if (isAppStarted) return; 
             isAppStarted = true;
             
+            // Trik sembunyiin URL Bar di mobile
+            setTimeout(() => { window.scrollTo(0, 1); }, 100);
+
+            document.getElementById('rotate-overlay').style.display = 'none';
             showScreen('step-first');
             setTimeout(() => { showScreen('step-login'); }, 3500);
-            initCarousel(); // Initialize the 3D Agent Slider
+            initCarousel(); 
         }
 
         // FUNGSI BUAT DETEKSI LAYAR
         function checkOrientationAndStart() {
-            // Cek apakah lebar layar lebih besar dari tinggi (Landscape)
             if (window.innerWidth > window.innerHeight) {
                 startAppSequence();
+            } else {
+                document.getElementById('rotate-overlay').style.display = 'flex';
             }
         }
 
         // STARTUP LOGIC
         window.onload = () => {
-            // 1. Langsung cek orientasi pas pertama kali web dibuka
             checkOrientationAndStart();
-
-            // 2. Pasang pendengar (listener) kalau user muter HP-nya
             window.addEventListener('resize', checkOrientationAndStart);
             window.addEventListener('orientationchange', () => {
-                setTimeout(checkOrientationAndStart, 200); // Kasih delay dikit biar browser stabil ukur layarnya
+                setTimeout(checkOrientationAndStart, 200); 
             });
         };
 
-        // AUDIO UNLOCK HACK BUAT HP
-        document.body.addEventListener('click', function unlockAudio() {
-            let audios = ['audioJamrud', 'audioLobby', 'audioGunshot', 'audioMeme', 'audioVictory'];
-            audios.forEach(id => {
-                let a = document.getElementById(id);
-                if(a) { a.play().then(() => a.pause()).catch(e=>{}); }
-            });
-            document.body.removeEventListener('click', unlockAudio);
-        }, {once: true});
-
-        // FUNGSI REQUEST FULLSCREEN BROWSER
+        // FUNGSI REQUEST FULLSCREEN (Untuk Android / PC)
         function requestFullScreen() {
             let elem = document.documentElement;
             if (elem.requestFullscreen) {
                 elem.requestFullscreen().catch(err => console.log(err));
-            } else if (elem.webkitRequestFullscreen) { /* Safari */
+            } else if (elem.webkitRequestFullscreen) { /* Safari / Chrome Mac */
                 elem.webkitRequestFullscreen().catch(err => console.log(err));
-            } else if (elem.msRequestFullscreen) { /* IE11 */
-                elem.msRequestFullscreen().catch(err => console.log(err));
             }
         }
 
@@ -683,10 +668,22 @@
             }
         }
 
-        // LOGIN USER & TRIGGER FULLSCREEN
+        // LOGIN USER & BULLETPROOF AUDIO HACK
         document.getElementById('btnLogin').onclick = () => {
-            // Panggil API fullscreen sesaat setelah interaksi klik login
             requestFullScreen();
+            setTimeout(() => { window.scrollTo(0, 1); }, 100);
+
+            // AUDIO HACK KHUSUS IOS - Pancing semua audio di awal klik login
+            let audios = ['audioJamrud', 'audioLobby', 'audioGunshot', 'audioMeme', 'audioVictory'];
+            audios.forEach(id => {
+                let a = document.getElementById(id);
+                if(a) {
+                    a.play().then(() => { 
+                        a.pause(); 
+                        a.currentTime = 0; 
+                    }).catch(err => console.log("Audio block:", err));
+                }
+            });
 
             const u = document.getElementById('username').value;
             const p = document.getElementById('password').value;
@@ -712,6 +709,7 @@
             document.getElementById('vidHome').pause(); 
             showScreen('step-lobby');
             document.getElementById('audioLobby').play();
+            setTimeout(() => { window.scrollTo(0, 1); }, 100);
         };
 
         function backToHome() {
@@ -729,7 +727,7 @@
             setTimeout(() => {
                 showScreen('step-loading-2');
                 document.getElementById('vidLoading2').play();
-                document.getElementById('audioJamrud').play(); 
+                document.getElementById('audioJamrud').play(); // SEKARANG PASTI JALAN DI IOS
                 setTimeout(() => document.getElementById('loading-bar-fill-2').style.width = '100%', 100);
             }, 2000);
 
