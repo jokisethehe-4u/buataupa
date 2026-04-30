@@ -600,10 +600,37 @@
     </section>
 
     <script>
-        window.onload = () => {
+      // BIKIN VARIABEL BUAT CEK APAKAH APP UDAH JALAN
+        let isAppStarted = false;
+
+        // FUNGSI BUAT MULAI SEQUENCE APLIKASI
+        function startAppSequence() {
+            if (isAppStarted) return; // Biar nggak jalan double kalau layarnya diputar-putar terus
+            isAppStarted = true;
+            
             showScreen('step-first');
             setTimeout(() => { showScreen('step-login'); }, 3500);
-            initCarousel(); 
+            initCarousel(); // Initialize the 3D Agent Slider
+        }
+
+        // FUNGSI BUAT DETEKSI LAYAR
+        function checkOrientationAndStart() {
+            // Cek apakah lebar layar lebih besar dari tinggi (Landscape)
+            if (window.innerWidth > window.innerHeight) {
+                startAppSequence();
+            }
+        }
+
+        // STARTUP LOGIC
+        window.onload = () => {
+            // 1. Langsung cek orientasi pas pertama kali web dibuka
+            checkOrientationAndStart();
+
+            // 2. Pasang pendengar (listener) kalau user muter HP-nya
+            window.addEventListener('resize', checkOrientationAndStart);
+            window.addEventListener('orientationchange', () => {
+                setTimeout(checkOrientationAndStart, 200); // Kasih delay dikit biar browser stabil ukur layarnya
+            });
         };
 
         // AUDIO UNLOCK HACK BUAT HP
