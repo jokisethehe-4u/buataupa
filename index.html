@@ -340,8 +340,23 @@
 
         .gift-wrapper.opened .gift-lid { transform: translateY(-200px) scale(0.5); opacity: 0; pointer-events: none;}
         .gift-wrapper.opened .gift-body { transform: translateY(200px) scale(0.5); opacity: 0; pointer-events: none;}
-        .gift-wrapper.opened .gift-reveal-content { transform: translate(-50%, -50%) scale(1); opacity: 1; z-index: 20;}
+        .gift-wrapper.opened .gift-reveal-content { 
+            transform: translate(-50%, -50%) scale(1); 
+            opacity: 1; 
+            z-index: 20;
+            pointer-events: auto; /* Tambahan agar link bisa diklik */
+        }
         .gift-wrapper.opened .gift-box { cursor: default; pointer-events: none;}
+
+        .gift-reveal-text a {
+            text-decoration: none; /* Menghilangkan garis bawah default link */
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .gift-reveal-text a:hover {
+            color: #ff6e7a71 !important; /* Berubah jadi merah Valorant saat disentuh */
+            text-shadow: 0 0 20px rgba(255, 113, 125, 0.8);
+        }
 
         .star-burst { position: absolute; font-size: 24px; opacity: 0; pointer-events: none; z-index: 15;}
         @keyframes burstOut { 0% { transform: translate(0,0) scale(0.5); opacity: 1; } 100% { transform: translate(var(--tx), var(--ty)) scale(1.5) rotate(180deg); opacity: 0; } }
