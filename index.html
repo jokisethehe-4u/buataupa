@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- META TAG KHUSUS IOS & PWA BIAR FULLSCREEN -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -35,9 +34,37 @@
         .screen.active { display: block; opacity: 1; z-index: 20; }
         .full-bg { width: 100%; height: 100%; object-fit: cover; position: fixed; top:0; left:0; z-index: -1; }
 
-        /* FITUR WAJIB LANDSCAPE UNTUK HP */
+        /* =======================================
+           SETUP AWAL & TOOLBAR HIDE (FIX IOS) 
+           ======================================= */
+        #setup-screen {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #0f1923;
+            z-index: 9999999; display: flex; flex-direction: column; justify-content: center;
+            align-items: center; padding: 25px; text-align: center;
+        }
+        .setup-box {
+            background: rgba(0, 0, 0, 0.6); border: 2px solid #ff4655; border-radius: 8px;
+            padding: 30px 20px; max-width: 400px; width: 100%; box-shadow: 0 10px 30px rgba(255, 70, 85, 0.2);
+        }
+        .setup-box h2 { color: #ff4655; font-size: 22px; margin-bottom: 10px; }
+        .setup-box p.subtitle { color: #ece8e1; font-size: 13px; margin-bottom: 25px; opacity: 0.8; }
+        .setup-instructions {
+            background: rgba(255, 255, 255, 0.05); padding: 15px; border-left: 4px solid #00ffaa;
+            text-align: left; font-size: 13px; line-height: 1.6; margin-bottom: 25px;
+        }
+        .setup-instructions b { color: #00ffaa; }
+        .btn-setup-ready {
+            background: #ff4655; color: #fff; border: none; padding: 18px 0; width: 100%;
+            font-size: 18px; font-weight: bold; cursor: pointer; letter-spacing: 2px; transition: 0.2s;
+        }
+        .btn-setup-ready:active { transform: scale(0.95); background: #e03e4d; }
+
+        /* =======================================
+           ROTATION OVERLAY MURNI CSS (FIX STUCK)
+           ======================================= */
         #rotate-overlay {
-            display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            display: none !important; /* Default mati */
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: #0f1923; z-index: 999999; flex-direction: column; justify-content: center; 
             align-items: center; text-align: center; padding: 40px;
         }
@@ -45,6 +72,14 @@
         #rotate-overlay p { color: #ece8e1; font-family: Arial, sans-serif; font-size: 14px; line-height: 1.6;}
         .rotate-icon { font-size: 50px; margin-bottom: 20px; animation: spinRotate 2s infinite ease-in-out; }
         @keyframes spinRotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(-90deg); } }
+
+        /* Aturan CSS: Hanya muncul jika ada class require-landscape DAN HP posisi Berdiri */
+        @media screen and (orientation: portrait) {
+            body.require-landscape #rotate-overlay { display: flex !important; }
+        }
+        @media screen and (orientation: landscape) {
+            body.require-landscape #rotate-overlay { display: none !important; }
+        }
 
         /* STEP 1 & 2: FIRST SCREEN & LOGIN */
         #step-first { background: #ff4829; }
@@ -362,6 +397,23 @@
 </head>
 <body>
 
+    <!-- SCREEN SETUP (KHUSUS AWAL) -->
+    <div id="setup-screen">
+        <div class="setup-box">
+            <h2 class="valo-font">SYSTEM INITIALIZATION</h2>
+            <p class="subtitle valo-font">PRE-FLIGHT CHECKLIST (IOS DEVICES)</p>
+            
+            <div class="setup-instructions">
+                <p style="margin-bottom: 8px;">Dapatkan <b>Full Screen Experience</b> dengan menyembunyikan toolbar browser:</p>
+                <p>1. Tap icon <b>[Aa]</b> atau <b>[...]</b> di pojok bawah browser.</p>
+                <p>2. Pilih menu <b>"Hide Toolbar"</b> <i class="fa-solid fa-up-right-and-down-left-from-center" style="color:#00ffaa; margin-left:3px;"></i></p>
+            </div>
+            
+            <button id="btn-setup-ready" class="btn-setup-ready valo-font">SYSTEM READY</button>
+        </div>
+    </div>
+
+    <!-- PENGINGAT ROTATE MURNI CSS -->
     <div id="rotate-overlay">
         <div class="rotate-icon">🔄</div>
         <h2 class="valo-font">SYSTEM: ROTATION REQUIRED</h2>
@@ -595,47 +647,63 @@
     </section>
 
     <script>
-        // BIKIN VARIABEL BUAT CEK APAKAH APP UDAH JALAN
         let isAppStarted = false;
+        let isSetupDone = false;
 
-        // FUNGSI BUAT MULAI SEQUENCE APLIKASI JIKA LANDSCAPE
-        function startAppSequence() {
-            if (isAppStarted) return; 
-            isAppStarted = true;
+        // FUNGSI BUTTON DI SETUP SCREEN (Bypass Audio Policy iOS)
+        document.getElementById('btn-setup-ready').onclick = function() {
+            // Trik Unlock Audio Global
+            let audios = ['audioJamrud', 'audioLobby', 'audioGunshot', 'audioMeme', 'audioVictory'];
+            audios.forEach(id => {
+                let a = document.getElementById(id);
+                if(a) {
+                    a.play().then(() => { 
+                        a.pause(); 
+                        a.currentTime = 0; 
+                    }).catch(err => console.log("Audio block bypass failed:", err));
+                }
+            });
+
+            // Sembunyikan setup screen & kasih izin jalan
+            document.getElementById('setup-screen').style.display = 'none';
+            isSetupDone = true;
             
-            // Trik sembunyiin URL Bar di mobile
-            setTimeout(() => { window.scrollTo(0, 1); }, 100);
+            // Tambahin class ini buat mancing peringatan rotate (kalau potrait)
+            document.body.classList.add('require-landscape');
+            
+            // Cek langsung posisi HP nya
+            checkOrientationAndStart();
+        };
 
-            document.getElementById('rotate-overlay').style.display = 'none';
-            showScreen('step-first');
-            setTimeout(() => { showScreen('step-login'); }, 3500);
-            initCarousel(); 
-        }
-
-        // FUNGSI BUAT DETEKSI LAYAR
+        // FUNGSI BUAT MULAI SEQUENCE APLIKASI
         function checkOrientationAndStart() {
+            if (!isSetupDone) return; // Jangan mulai kalo belom klik SYSTEM READY
+
             if (window.innerWidth > window.innerHeight) {
-                startAppSequence();
-            } else {
-                document.getElementById('rotate-overlay').style.display = 'flex';
+                if (!isAppStarted) {
+                    isAppStarted = true;
+                    // Trik sembunyiin URL Bar
+                    setTimeout(() => { window.scrollTo(0, 1); }, 100);
+
+                    showScreen('step-first');
+                    setTimeout(() => { showScreen('step-login'); }, 3500);
+                    initCarousel(); 
+                }
             }
         }
 
         // STARTUP LOGIC
         window.onload = () => {
-            checkOrientationAndStart();
             window.addEventListener('resize', checkOrientationAndStart);
-            window.addEventListener('orientationchange', () => {
-                setTimeout(checkOrientationAndStart, 200); 
-            });
+            window.addEventListener('orientationchange', () => { setTimeout(checkOrientationAndStart, 200); });
         };
 
-        // FUNGSI REQUEST FULLSCREEN (Untuk Android / PC)
+        // FUNGSI REQUEST FULLSCREEN (Untuk PC / Android)
         function requestFullScreen() {
             let elem = document.documentElement;
             if (elem.requestFullscreen) {
                 elem.requestFullscreen().catch(err => console.log(err));
-            } else if (elem.webkitRequestFullscreen) { /* Safari / Chrome Mac */
+            } else if (elem.webkitRequestFullscreen) {
                 elem.webkitRequestFullscreen().catch(err => console.log(err));
             }
         }
@@ -668,22 +736,10 @@
             }
         }
 
-        // LOGIN USER & BULLETPROOF AUDIO HACK
+        // LOGIN USER
         document.getElementById('btnLogin').onclick = () => {
             requestFullScreen();
             setTimeout(() => { window.scrollTo(0, 1); }, 100);
-
-            // AUDIO HACK KHUSUS IOS - Pancing semua audio di awal klik login
-            let audios = ['audioJamrud', 'audioLobby', 'audioGunshot', 'audioMeme', 'audioVictory'];
-            audios.forEach(id => {
-                let a = document.getElementById(id);
-                if(a) {
-                    a.play().then(() => { 
-                        a.pause(); 
-                        a.currentTime = 0; 
-                    }).catch(err => console.log("Audio block:", err));
-                }
-            });
 
             const u = document.getElementById('username').value;
             const p = document.getElementById('password').value;
@@ -718,16 +774,24 @@
             document.getElementById('audioLobby').pause();
         }
 
+        // START BUTTON & JAMRUD AUDIO HACK
         const btnStart = document.getElementById('btnStartGame');
         btnStart.onclick = function() {
             this.innerText = 'IN QUEUE';
             this.classList.add('in-queue'); 
             document.getElementById('audioLobby').pause(); 
 
+            // HACK IOS: Lagu Jamrud langsung diputar detik ini juga supaya browser kasih ijin,
+            // tapi kita set volume = 0 biar ga ketauan. Nanti pas loading layarnya, volumenya diubah jadi 1.
+            let jamrud = document.getElementById('audioJamrud');
+            jamrud.volume = 0; 
+            jamrud.play().catch(e=>console.log("Play failed", e));
+
             setTimeout(() => {
                 showScreen('step-loading-2');
                 document.getElementById('vidLoading2').play();
-                document.getElementById('audioJamrud').play(); // SEKARANG PASTI JALAN DI IOS
+                jamrud.volume = 1; // Balikin volume jadi 100%
+                
                 setTimeout(() => document.getElementById('loading-bar-fill-2').style.width = '100%', 100);
             }, 2000);
 
