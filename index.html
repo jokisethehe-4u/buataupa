@@ -498,7 +498,7 @@
     </section>
 
     <section id="step-home" class="screen">
-        <video id="vidHome" src="assets/homescreen.mp4" loop playsinline class="full-bg"></video>
+        <video id="vidHome" src="assets/homescreen.mp4" loop playsinline muted class="full-bg"></video>
         <div class="home-left-gradient"></div>
         <div class="home-top-left valo-font"><div class="v-logo">V</div><div class="v-text">DIMENSION<br><span>EPISODE 5 // ACT III</span></div></div>
         <div class="home-top-right"><span>⚙️</span><span>V 0</span><span>R 3,838</span></div>
@@ -580,7 +580,7 @@
     </section>
 
     <section id="step-loading-2" class="screen">
-        <video id="vidLoading2" src="assets/loadingscreen.mp4" playsinline loop class="full-bg"></video>
+        <video id="vidLoading2" src="assets/loadingscreen.mp4" playsinline muted loop class="full-bg"></video>
         <div class="loading-bar-container"><div id="loading-bar-fill-2"></div></div>
     </section>
 
@@ -789,7 +789,9 @@
 
             setTimeout(() => {
                 showScreen('step-loading-2');
-                document.getElementById('vidLoading2').play();
+                let loadingVid2 = document.getElementById('vidLoading2');
+                loadingVid2.muted = true; // <-- Tambahin ini biar Safari santai
+                loadingVid2.play();
                 jamrud.volume = 1; // Balikin volume jadi 100%
                 
                 setTimeout(() => document.getElementById('loading-bar-fill-2').style.width = '100%', 100);
